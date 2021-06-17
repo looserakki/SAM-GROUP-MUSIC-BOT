@@ -4,7 +4,7 @@ The easiest way to deploy this Bot
 
 Get STRING_NAME from here:
 
-[![GenerateString](https://t.me/Pyrogram_gen_bot)]
+[![GenerateString](https://t.me/Pyrogram_gen_bot)
 
 ### Mandatory Vars.
 
