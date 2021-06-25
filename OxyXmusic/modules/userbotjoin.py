@@ -21,7 +21,7 @@ async def addchannel(client, message):
     try:
         user = await USER.get_me()
     except:
-        user.first_name = "OxyMusic"
+        user.first_name = "OxyXmusic"
 
     try:
         await USER.join_chat(invitelink)
@@ -34,7 +34,7 @@ async def addchannel(client, message):
         print(e)
         await message.reply_text(
             f"<b>🛑 Flood Wait Error 🛑 \n User {user.first_name} couldn't join your group due to heavy join requests for userbot! Make sure user is not banned in group."
-            "\n\nOr manually add @OXY_VC_02 to your Group and try again</b>",
+            "\n\nOr manually add @Music_op_bot to your Group and try again</b>",
         )
         return
     await message.reply_text(
@@ -95,7 +95,7 @@ async def addcchannel(client, message):
     try:
         user = await USER.get_me()
     except:
-        user.first_name = "OxyMusic"
+        user.first_name = "OxyXmusic"
 
     try:
         await USER.join_chat(invitelink)
@@ -109,7 +109,7 @@ async def addcchannel(client, message):
         print(e)
         await message.reply_text(
             f"<b>🛑 Flood Wait Error 🛑 \n User {user.first_name} couldn't join your channel due to heavy join requests for userbot! Make sure user is not banned in channel."
-            "\n\nOr manually add @OXY_VC_02 to your Group and try again</b>",
+            "\n\nOr manually add @Music_op_bot to your Group and try again</b>",
         )
         return
     await message.reply_text(
