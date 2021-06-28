@@ -25,5 +25,5 @@ ARQ_API_KEY = getenv("ARQ_API_KEY", None)
 PMPERMIT = getenv("PMPERMIT", None)
 LOG_GRP = getenv("LOG_GRP", None)
 COMMAND_PREFIXES = list(getenv("COMMAND_PREFIXES", "/ !").split())
-
+PLAYLIST_PIC = getenv("PLAYLIST_PIC", "https://telegra.ph/file/b11ffe2a2edb0869adb44.jpg")
 SUDO_USERS = list(map(int, getenv("SUDO_USERS").split()))
