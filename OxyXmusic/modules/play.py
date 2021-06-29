@@ -1,20 +1,3 @@
-# OxyXmusic (Telegram bot project)
-# Copyright (C) 2021  OxyNotOp
-# Copyright (C) 2021  TheHamkerCat (Python_ARQ)
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU Affero General Public License as
-# published by the Free Software Foundation, either version 3 of the
-# License, or (at your option) any later version.
-
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU Affero General Public License for more details.
-#
-# You should have received a copy of the GNU Affero General Public License
-# along with this program.  If not, see <https://www.gnu.org/licenses/>.
-
-#--------------------------------------------#
 import json
 import os
 from os import path
@@ -36,8 +19,7 @@ from youtube_search import YoutubeSearch
 from OxyXmusic.config import ARQ_API_KEY
 from OxyXmusic.config import BOT_NAME as bn
 from OxyXmusic.config import DURATION_LIMIT
-from OxyXmusic.config import UPDATES_CHANNEL as updateschannel 
-from OxyXmusic.config import PLAYLIST_PIC as yt_listpic
+from OxyXmusic.config import UPDATES_CHANNEL as updateschannel
 from OxyXmusic.config import que
 from OxyXmusic.function.admins import admins as a
 from OxyXmusic.helpers.admins import get_administrators
@@ -109,9 +91,8 @@ async def generate_cover(requested_by, title, views, duration, thumbnail):
                 await f.write(await resp.read())
                 await f.close()
 
-
     image1 = Image.open("./background.png")
-    image2 = Image.open("./thumbnail/foreground_converted.png")
+    image2 = Image.open("./etc/foreground.png")
     image3 = changeImageSize(1280, 720, image1)
     image4 = changeImageSize(1280, 720, image2)
     image5 = image3.convert("RGBA")
@@ -119,17 +100,22 @@ async def generate_cover(requested_by, title, views, duration, thumbnail):
     Image.alpha_composite(image5, image6).save("temp.png")
     img = Image.open("temp.png")
     draw = ImageDraw.Draw(img)
-    perufont = ImageFont.truetype("thumbnail/coffinofficial.otf", 48)
-    opfont = ImageFont.truetype("thumbnail/KronaOne-Regular.ttf", 52)
-    draw.text((10, 580), f"Now Playing", fill="white", font=perufont)
-    draw.text((10, 640), f"{title}", fill="white", font=opfont)
+    font = ImageFont.truetype("etc/font.otf", 32)
+    draw.text((205, 550), f"Title: {title}", (51, 215, 255), font=font)
+    draw.text((205, 590), f"Duration: {duration}", (255, 255, 255), font=font)
+    draw.text((205, 630), f"Views: {views}", (255, 255, 255), font=font)
+    draw.text(
+        (205, 670),
+        f"Added By: {requested_by}",
+        (255, 255, 255),
+        font=font,
+    )
     img.save("final.png")
     os.remove("temp.png")
     os.remove("background.png")
 
 
 @Client.on_message(filters.command("playlist") & filters.group & ~filters.edited)
-@authorized_users_only
 async def playlist(client, message):
     global que
     if message.chat.id in DISABLED_GROUPS:
@@ -198,7 +184,6 @@ def r_ply(type_):
 
 
 @Client.on_message(filters.command("current") & filters.group & ~filters.edited)
-@authorized_users_only
 async def ee(client, message):
     if message.chat.id in DISABLED_GROUPS:
         return
@@ -276,7 +261,6 @@ async def hfmm(_, message):
         
 
 @Client.on_callback_query(filters.regex(pattern=r"^(playlist)$"))
-@authorized_users_only
 async def p_cb(b, cb):
     global que
     que.get(cb.message.chat.id)
@@ -449,8 +433,7 @@ async def m_cb(b, cb):
             await cb.answer("Chat is not connected!", show_alert=True)
 
 
-@Client.on_message(command(['play', 'play@CoffinXmusic_bot']) & other_filters)
-@authorized_users_only
+@Client.on_message(command("play") & other_filters)
 async def play(_, message: Message):
     global que
     global useer
@@ -507,7 +490,7 @@ async def play(_, message: Message):
         # lmoa = await client.get_chat_member(chid,wew)
     except:
         await lel.edit(
-            f"<i> {user.first_name} Userbot not in this chat, Ask admin to send /play command for first time or add {user.first_name} manually</i>"
+            f"<i> {user.first_name} Userbot not in this chat, Ask admin to send /play command for first time or add {user.first_name} manually add @OXY_VC_02 in your group </i>"
         )
         return
     text_links=None
@@ -624,9 +607,9 @@ async def play(_, message: Message):
 
             while j < 5:
                 toxxt += f"{emojilist[j]} [Title - {results[j]['title']}](https://youtube.com{results[j]['url_suffix']})\n"
-                toxxt += f" ┗ **Duration** - {results[j]['duration']}\n"
-                toxxt += f" ┗ **Views** - {results[j]['views']}\n"
-                toxxt += f" ┗ **Channel** - {results[j]['channel']}\n\n"
+                toxxt += f" ╚ **Duration** - {results[j]['duration']}\n"
+                toxxt += f" ╚ **Views** - {results[j]['views']}\n"
+                toxxt += f" ╚ **Channel** - {results[j]['channel']}\n\n"
 
                 j += 1            
             koyboard = InlineKeyboardMarkup(
@@ -697,7 +680,7 @@ async def play(_, message: Message):
         qeue.append(appendable)
         await message.reply_photo(
             photo="final.png",
-            caption=f"**🏷️Song: [{title}]({url})**\n⏱️Duration: {duration}\n💡Status: `queued`\n\n **At Position** #{position}!",
+            caption=f"#⃣ Your requested song **queued** at position {position}!",
             reply_markup=keyboard,
         )
         os.remove("final.png")
@@ -719,12 +702,8 @@ async def play(_, message: Message):
         await message.reply_photo(
             photo="final.png",
             reply_markup=keyboard,
-            caption="**𝘾𝙐𝙍𝙍𝙀𝙉𝙏𝙇𝙔 𝙋𝙇𝘼𝙔𝙄𝙉𝙂**\n\n**🏷️Song: [{song_name}]({url})**\n⏱️Duration: {song_duration}\n💡Status: `Playing🎵`\nRequested By {request_by}\nPlaying In: {chat_title}**".format(
-                song_name=title,
-                url=url,   
-                song_duration=duration,
-                request_by=message.from_user.mention,
-                chat_title=message.chat.title,
+            caption="▶️ **Playing** here the song requested by {} via Youtube Music 😜".format(
+                message.from_user.mention()
             ),
         )
         os.remove("final.png")
@@ -732,7 +711,6 @@ async def play(_, message: Message):
 
 
 @Client.on_message(filters.command("ytplay") & filters.group & ~filters.edited)
-@authorized_users_only
 async def ytplay(_, message: Message):
     global que
     if message.chat.id in DISABLED_GROUPS:
@@ -781,14 +759,14 @@ async def ytplay(_, message: Message):
                     # print(e)
                     await lel.edit(
                         f"<b>🔴 Flood Wait Error 🔴 \nUser {user.first_name} couldn't join your group due to heavy requests for userbot! Make sure user is not banned in group."
-                        "\n\nOr manually add assistant to your Group and try again</b>",
+                        "\n\nOr manually add assistant to your Group and try again request here @OXY_VC_02 with your group link</b>",
                     )
     try:
         await USER.get_chat(chid)
         # lmoa = await client.get_chat_member(chid,wew)
     except:
         await lel.edit(
-            f"<i> {user.first_name} Userbot not in this chat, Ask admin to send /play command for first time or add {user.first_name} manually</i>"
+            f"<i> {user.first_name} Userbot not in this chat, Ask admin to send /play command for first time or add {user.first_name} manually request here @OXY_VC_02 with your group link</i>"
         )
         return
     await lel.edit("🔎 **Finding**")
@@ -850,7 +828,7 @@ async def ytplay(_, message: Message):
         qeue.append(appendable)
         await message.reply_photo(
             photo="final.png",
-            caption=f"**🏷️Song: [{title}]({url})**\n⏱️Duration: {duration}\n💡Status: `queued`\n\n **At Position** #{position}!",
+            caption=f"#⃣ Your requested song **queued** at position {position}!",
             reply_markup=keyboard,
         )
         os.remove("final.png")
@@ -872,19 +850,14 @@ async def ytplay(_, message: Message):
         await message.reply_photo(
             photo="final.png",
             reply_markup=keyboard,
-            caption="**𝘾𝙐𝙍𝙍𝙀𝙉𝙏𝙇𝙔 𝙋𝙇𝘼𝙔𝙄𝙉𝙂**\n\n**🏷️Song: [{song_name}]({url})**\n⏱️Duration: {song_duration}\n💡Status: `Playing🎵`\nRequested By {request_by}\nPlaying In: {chat_title}**".format(
-                song_name=title,
-                url=url,   
-                song_duration=duration,
-                request_by=message.from_user.mention,
-                chat_title=message.chat.title,
+            caption="▶️ **Playing** here the song requested by {} via Youtube Music 😜".format(
+                message.from_user.mention()
             ),
         )
         os.remove("final.png")
         return await lel.delete()
     
 @Client.on_message(filters.command("dplay") & filters.group & ~filters.edited)
-@authorized_users_only
 async def deezer(client: Client, message_: Message):
     if message_.chat.id in DISABLED_GROUPS:
         return
@@ -895,7 +868,7 @@ async def deezer(client: Client, message_: Message):
     try:
         user = await USER.get_me()
     except:
-        user.first_name = "music"
+        user.first_name = "OxyXmusic"
     usar = user
     wew = usar.id
     try:
@@ -932,14 +905,14 @@ async def deezer(client: Client, message_: Message):
                     # print(e)
                     await lel.edit(
                         f"<b>🔴 Flood Wait Error 🔴 \nUser {user.first_name} couldn't join your group due to heavy requests for userbot! Make sure user is not banned in group."
-                        "\n\nOr manually add assistant to your Group and try again</b>",
+                        "\n\nOr manually add assistant to your Group and try again request here @OXY_VC_02 with your group link</b>",
                     )
     try:
         await USER.get_chat(chid)
         # lmoa = await client.get_chat_member(chid,wew)
     except:
         await lel.edit(
-            f"<i> {user.first_name} Userbot not in this chat, Ask admin to send /play command for first time or add {user.first_name} manually</i>"
+            f"<i> {user.first_name} Userbot not in this chat, Ask admin to send /play command for first time or add {user.first_name} manually request here @OXY_VC_02 with your group link</i>"
         )
         return
     requested_by = message_.from_user.first_name
@@ -1023,7 +996,6 @@ async def deezer(client: Client, message_: Message):
 
 
 @Client.on_message(filters.command("splay") & filters.group & ~filters.edited)
-@authorized_users_only
 async def jiosaavn(client: Client, message_: Message):
     global que
     if message_.chat.id in DISABLED_GROUPS:
@@ -1034,7 +1006,7 @@ async def jiosaavn(client: Client, message_: Message):
     try:
         user = await USER.get_me()
     except:
-        user.first_name = "music"
+        user.first_name = "OxyXmusic"
     usar = user
     wew = usar.id
     try:
@@ -1071,14 +1043,14 @@ async def jiosaavn(client: Client, message_: Message):
                     # print(e)
                     await lel.edit(
                         f"<b>🔴 Flood Wait Error 🔴 \nUser {user.first_name} couldn't join your group due to heavy requests for userbot! Make sure user is not banned in group."
-                        "\n\nOr manually add to your Group and try again</b>",
+                        "\n\nOr manually add @OXY_VC_02 to your Group and try again request here @AwesomeSupport with your group link</b>",
                     )
     try:
         await USER.get_chat(chid)
         # lmoa = await client.get_chat_member(chid,wew)
     except:
         await lel.edit(
-            "<i> helper Userbot not in this chat, Ask admin to send /play command for first time or add assistant manually</i>"
+            "<i> helper Userbot not in this chat, Ask admin to send /play command for first time or add assistant manually request here @OXY_VC_02 with your group link</i>"
         )
         return
     requested_by = message_.from_user.first_name
@@ -1167,7 +1139,6 @@ async def jiosaavn(client: Client, message_: Message):
 
 
 @Client.on_callback_query(filters.regex(pattern=r"plll"))
-@authorized_users_only
 async def lol_cb(b, cb):
     global que
 
@@ -1245,7 +1216,7 @@ async def lol_cb(b, cb):
         await cb.message.delete()
         await b.send_photo(chat_id,
             photo="final.png",
-            caption=f"**🏷️Song: [{title}]({url})**\n⏱️Duration: {duration}\n💡Status: `queued`\n\n **At Position** #{position}!",
+            caption=f"#⃣  Song requested by {r_by.mention} **queued** at position {position}!",
             reply_markup=keyboard,
         )
         os.remove("final.png")
@@ -1267,7 +1238,7 @@ async def lol_cb(b, cb):
         await b.send_photo(chat_id,
             photo="final.png",
             reply_markup=keyboard,
-            caption=f"**🏷️Song: [{title}]({url})**\n⏱️Duration: {duration}\n💡Status: `Playing`\n Requested by: {r_by.mention}",
+            caption=f"▶️ **Playing** here the song requested by {r_by.mention} via Youtube Music 😜",
         )
         
         os.remove("final.png")
