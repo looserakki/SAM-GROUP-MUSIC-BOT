@@ -1,34 +1,14 @@
-# OxyXmusic - Telegram bot for streaming audio in group calls
-# Copyright (C) 2021  OxyNotOp
-
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU Affero General Public License as
-# published by the Free Software Foundation, either version 3 of the
-# License, or (at your option) any later version.
-
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU Affero General Public License for more details.
-#
-# You should have received a copy of the GNU Affero General Public License
-# along with this program.  If not, see <https://www.gnu.org/licenses/>.
-
-
-from asyncio import QueueEmpty
-from pyrogram import Client
-from pyrogram import filters
+from asyncio.queues import QueueEmpty
+from OxyXmusic.config import que
+from pyrogram import Client, filters
 from pyrogram.types import Message
 
-from OxyXmusic.config import que
 from OxyXmusic.function.admins import set
 from OxyXmusic.helpers.channelmusic import get_chat_id
-from OxyXmusic.helpers.decorators import authorized_users_only
-from OxyXmusic.helpers.decorators import errors
-from OxyXmusic.helpers.filters import command 
-from OxyXmusic.helpers.filters import other_filters
+from OxyXmusic.helpers.decorators import authorized_users_only, errors
+from OxyXmusic.helpers.filters import command, other_filters
 from OxyXmusic.services.callsmusic import callsmusic
-from OxyXmusic.services.queues import queues
+
 
 
 @Client.on_message(filters.command(["channelpause","cpause"]) & filters.group & ~filters.edited)
@@ -43,12 +23,12 @@ async def pause(_, message: Message):
       await message.reply("Is chat even linked")
       return    
     chat_id = chid
-    if (chat_id not in callsmusic.active_chats) or (
-        callsmusic.active_chats[chat_id] == "paused"
+    if (chat_id not in callsmusic.pytgcalls.active_calls) or (
+        callsmusic.pytgcalls.active_calls[chat_id] == "paused"
     ):
         await message.reply_text("❗ Nothing is playing!")
     else:
-        callsmusic.pause(chat_id)
+        callsmusic.pytgcalls.pause_stream(chat_id)
         await message.reply_text("▶️ Paused!")
 
 
@@ -64,12 +44,12 @@ async def resume(_, message: Message):
       await message.reply("Is chat even linked")
       return    
     chat_id = chid
-    if (chat_id not in callsmusic.active_chats) or (
-        callsmusic.active_chats[chat_id] == "playing"
+    if (chat_id not in callsmusic.pytgcalls.active_calls) or (
+        callsmusic.pytgcalls.active_calls[chat_id] == "playing"
     ):
         await message.reply_text("❗ Nothing is paused!")
     else:
-        callsmusic.resume(chat_id)
+        callsmusic.pytgcalls.resume_stream(chat_id)
         await message.reply_text("⏸ Resumed!")
 
 
@@ -85,15 +65,15 @@ async def stop(_, message: Message):
       await message.reply("Is chat even linked")
       return    
     chat_id = chid
-    if chat_id not in callsmusic.active_chats:
+    if chat_id not in callsmusic.pytgcalls.active_calls:
         await message.reply_text("❗ Nothing is streaming!")
     else:
         try:
-            queues.clear(chat_id)
+            callsmusic.queues.clear(chat_id)
         except QueueEmpty:
             pass
 
-        await callsmusic.stop(chat_id)
+        callsmusic.pytgcalls.leave_group_call(chat_id)
         await message.reply_text("❌ Stopped streaming!")
 
 
@@ -110,17 +90,16 @@ async def skip(_, message: Message):
       await message.reply("Is chat even linked")
       return    
     chat_id = chid
-    if chat_id not in callsmusic.active_chats:
+    if chat_id not in callsmusic.pytgcalls.active_calls:
         await message.reply_text("❗ Nothing is playing to skip!")
     else:
-        queues.task_done(chat_id)
+        callsmusic.queues.task_done(chat_id)
 
-        if queues.is_empty(chat_id):
-            await callsmusic.stop(chat_id)
+        if callsmusic.queues.is_empty(chat_id):
+            callsmusic.pytgcalls.leave_group_call(chat_id)
         else:
-            await callsmusic.set_stream(
-                chat_id, 
-                queues.get(chat_id)["file"]
+            callsmusic.pytgcalls.change_stream(
+                chat_id, callsmusic.queues.get(chat_id)["file"]
             )
 
     qeue = que.get(chat_id)
