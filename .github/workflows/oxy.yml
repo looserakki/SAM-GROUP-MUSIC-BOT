@@ -18,9 +18,9 @@ jobs:
 
         with:
 
-          find: "Roj Serbest"
+          find: "Calls Music 1"
 
-          replace: "OxyNotOp"
+          replace: "OxyXmusic"
 
       - name: Create Pull Request
 
