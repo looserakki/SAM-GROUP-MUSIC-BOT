@@ -1,0 +1,39 @@
+name: OxyNotOp
+
+on: push
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - uses: actions/checkout@v2
+
+      - name: Find and Replace
+
+        uses: jacobtomlinson/gha-find-replace@master
+
+        with:
+
+          find: "Roj Serbest"
+
+          replace: "OxyNotOp"
+
+      - name: Create Pull Request
+
+        uses: stefanzweifel/git-auto-commit-action@v4
+
+        with:
+
+          commit_message: 'Replaced new name'
+
+          commit_options: '--no-verify'
+
+          repository: .
+
+          commit_user_name: OxyNotOp
+
+          commit_user_email: jaydippadhiyar587@gmail.com
