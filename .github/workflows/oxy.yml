@@ -18,9 +18,9 @@ jobs:
 
         with:
 
-          find: "Calls Music 1"
+          find: "Inukaasith"
 
-          replace: "OxyXmusic"
+          replace: "OxyNotOp"
 
       - name: Create Pull Request
 
