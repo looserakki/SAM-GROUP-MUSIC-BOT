@@ -1,1 +1,3 @@
-from OxyXmusic.services.downloaders.youtube import download
+from OxyXmusic.services.downloaders import youtube
+
+__all__ = ["youtube"]
