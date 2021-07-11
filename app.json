@@ -1,13 +1,16 @@
 {
   "name": "OxyXmusic",
-  "logo": "https://telegra.ph/file/7ffa8d18b9b7f1b51a81e.jpg",
+  "logo": "https://telegra.ph/file/36ff1b571aa11df5812de.jpg",
   "description": "Open-Source bot to play songs in your Telegram's Group Voice Chat. Powered by PyTgCalls.",
   "keywords": ["music", "voicechat", "telegram"],
-  "repository": "https://github.com/OxyNotOp/OxyVCbot",
-  "stack": "container",
+  "repository": "https://github.com/TeamDaisyX/OxyXmusic",
+  "stack": "heroku-20",
   "buildpacks": [
    {
      "url": "https://github.com/jonathanong/heroku-buildpack-ffmpeg-latest"
+   },
+   {
+     "url": "heroku/python"
    }   
   ],        
   "env": {
@@ -31,12 +34,12 @@
     "SUPPORT_GROUP": {
       "description": "Your MusicPlayer support group without @ [Leave this if you don't have one]",
       "required": false,
-      "value": "OxyXsupport"
+      "value": "DaisySupport_Official"
     },
     "PROJECT_NAME": {
       "description": "Your MusicPlayer project Name.",
       "required": false,
-      "value": "OxyXmusic"
+      "value": "OxyXmusic v5"
     },
     "ASSISTANT_NAME": {
       "description": "Your MusicPlayer's assistant Username without @.",
@@ -45,17 +48,17 @@
     "ARQ_API_KEY": {
       "description": "Get from @ARQRobot.",
       "required": false,
-      "value": "VKSSQH-SRNJYZ-MSOJAI-QALESR-ARQ"
+      "value": ""
     },    
     "BG_IMAGE": {
       "description": "BG image of bot (Use transparent one) [IGNORE].",
       "required": false,
-      "value": "https://telegra.ph/file/a765ac304f4d6f507e544.jpg"
+      "value": " https://telegra.ph/file/dcfdf612e499eef0e0b1f.png"
     },     
     "UPDATES_CHANNEL": {
       "description": "Updates Channel without @ [Leave this if you don't have one].",
       "required": false,
-      "value": "OxyXupdates"
+      "value": "DaisyXupdates"
     },    
     "API_ID": {
       "description": "App ID from my.telegram.org/apps",
@@ -77,7 +80,7 @@
     "DURATION_LIMIT": {
       "description": "Max audio duration limit for downloads (minutes).",
       "required": true,
-      "value": "15"
+      "value": "10"
     }
   }
 }
