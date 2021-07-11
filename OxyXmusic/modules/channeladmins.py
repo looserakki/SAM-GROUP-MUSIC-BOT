@@ -1,4 +1,4 @@
-# Calls Music 1 - Telegram bot for streaming audio in group calls
+# OxyXmusic - Telegram bot for streaming audio in group calls
 # Copyright (C) 2021  OxyNotOp
 
 # This program is free software: you can redistribute it and/or modify
