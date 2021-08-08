@@ -9,7 +9,7 @@ if os.path.exists("local.env"):
 
 que = {}
 SESSION_NAME = getenv("SESSION_NAME", "BQAGx2bn3TOO4S_ZHLzoCUquwDwfy0pdA9jYUcQItJDX7SMEhz5nfIu-iL-HJGYAFqKWcScY7_-V7sibMUDopvSKlpwK8iqjtwgsLa-EibFhxe8pBUUAPO7lfJA87TQrwhJDsX7uCZM-XfWQBFjDyEcTv_bIIu2aCo3QGwTKQK6zowlLr0cch2FC26GkAUwfJ0tywiF56B13wYuUnuke0bFe7mLZrENY4dCRzXpqWqHt3JeQVJsWN_-13aLql-h4xmuJPJddPGaKw6Vnz49zCaSO7QsYPCux6TOBv5tuEmGHrmya4SdjCEhVBUW-G7f6JakR0Lro8Gr1hdSD3hyhOdkEb6crEAA")
-BOT_TOKEN = getenv("BOT_TOKEN", "1728730929:AAENgSjKZv7UJsbvsdgtuTOPNIOeSPljqOE")
+BOT_TOKEN = getenv("BOT_TOKEN", "1728730929:AAESo9G0f62qLCXJnOWcKzp5Vblmrktivd4")
 BOT_NAME = getenv("BOT_NAME", "Patricia")
 UPDATES_CHANNEL = getenv("UPDATES_CHANNEL", "patricia_updates")
 BG_IMAGE = getenv("BG_IMAGE", "https://telegra.ph/file/cdaa3de5adab7ac73689f.png")
